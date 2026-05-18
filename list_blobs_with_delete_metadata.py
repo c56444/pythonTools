@@ -175,7 +175,8 @@ def main() -> int:
             blobs = container_client.list_blobs(name_starts_with=prefix, include=["metadata"])
             for blob in blobs:
                 if metadata_has_delete_1(blob.metadata):
-                    matched_blobs.append(f"{current_container_name}/{blob.name}")
+                    last_modified = blob.last_modified.strftime("%Y-%m-%d %H:%M:%S UTC") if blob.last_modified else "unknown"
+                    matched_blobs.append(f"{current_container_name}/{blob.name}\t{last_modified}")
 
         write_matches_to_file(args.output_file, matched_blobs)
 
